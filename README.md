@@ -36,5 +36,5 @@ A/C OFF, Target Reached
 ```
 BLOCK = { STATEMENT };
 
-STATEMENT = ( &lambda;
+STATEMENT = ( &Lambda; 
 ```
