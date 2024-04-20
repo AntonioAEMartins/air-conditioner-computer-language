@@ -5,36 +5,29 @@
 SET {}
 GET
 CHANGE
-TURN_ON
-TURN_OFF
-
-## Example of the language
-Input:
-```
-SET ROOM_TEMPERTURE 80
-GET ROOM_TEMPERATURE
-CHANGE AIR_CONDITIONER TEMPERATURE 50°F
-TURN_ON AIR_CONDITIONER COLD (Speed: 4, Target: 50) THEN TURN_OFF AIR_CONDITIONER
-TURN_ON AIR_CONDITIONER AUTO IF ROOM_TEMPERATURE BELOW 60 SPEED 1 ELSE SPEED 3
-```
-
-Output:
-```
-Room Temperature: 80 °F
-Cannot Change A/C Temperature, because it is OFF
-A/C ON, Target 50°F with Speed 4
-Room Temperature: 79 °F
-Room Temperature: 78 °F
-Room Temperature: 77 °F
-Room Temperature: ... °F
-Room Temperature: 50 °F
-A/C OFF, Target Reached 
-```
+TURN_ON (CHANGE ... STATE)
+TURN_OFF (Change ... STATE)
 
 ## EBNF of the Language
 
 ```
 BLOCK = { STATEMENT };
 
-STATEMENT = ( &Lambda; 
+STATEMENT = ( &Lambda | ASSIGNMENT | CHANGE | GET | AUTO | IF ) "\n";
+
+ASSIGNMENT = "SET", IDENTIFIER, EXPRESSION;
+CHANGE = "CHANGE", ENTITY, PARAMETER, EXPRESSION;
+GET = "GET", IDENTIFIER;
+AUTO = "AUTO", BOOL EXPRESSION, "DO", "\n", STATEMENT, END;
+IF = "IF", BOOL EXPRESSION, "THEN", "\n", STATEMENT, ( ( ELSE, STATEMENT ) | END );
+EXPRESSION = TERM, { ( "+" | "-" ), TERM };
+TERM = FACTOR, { ( "*" | "/" ), FACTOR };
+FACTOR = ( ( "+" | "-" ), FACTOR ) | NUMBER | "(", BOOL EXPRESSION, ")" | IDENTIFIER;
+BOOL EXPRESSION = BOOL TERM, { "OR", BOOL TERM };
+BOOL TERM = REL EXP, { "AND", REL EXP };
+REL EXP = EXPRESSION, { ( "EQUAL", "ABOVE", "BELOW" ), EXPRESSION };
+IDENTIFIER = LETTER, { LETTER | DIGIT | "_" };
+NUMBER = DIGIT, { DIGIT };
+LETTER = (a | ... | z | A | ... | Z );
+DIGIT= ( 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0 );
 ```
