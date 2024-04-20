@@ -1,14 +1,6 @@
 # air-conditioner-computer-language
 
-## Commands
-
-SET {}
-GET
-CHANGE
-TURN_ON (CHANGE ... STATE)
-TURN_OFF (Change ... STATE)
-
-## EBNF of the Language
+## EBNF
 
 ```
 BLOCK = { STATEMENT };
