@@ -7,11 +7,12 @@ BLOCK = { STATEMENT };
 
 STATEMENT = ( "lambda" | ASSIGNMENT | CHANGE | GET | AUTO | IF ), "\n";
 
-ASSIGNMENT = "SET", IDENTIFIER, EXPRESSION;
-CHANGE = "CHANGE", ENTITY, PARAMETER, EXPRESSION;
-GET = "GET", IDENTIFIER;
-AUTO = "AUTO", BOOL_EXP, "DO", "\n", "lambda", { ( STATEMENT ), "lambda" }, "END";
-IF = "IF", BOOL_EXP, "THEN", "\n", "lambda", { ( STATEMENT ), "lambda" }, ( "lambda" | ( "ELSE", "\n", "lambda", { ( STATEMENT ), "lambda" } ) ), "END";
+ASSIGNMENT = "SET", IDENTIFIER, NUMBER;
+
+CHANGE = "CHANGE", IDENTIFIER, NUMBER;
+GET = "GET", IDENTIFIER, "\n";
+AUTO = "AUTO", BOOL_EXP, "DO", "lambda", { ( STATEMENT ), "lambda" }, "END";
+IF = "IF", BOOL_EXP, "THEN", "\n", "lambda", { ( STATEMENT ), "lambda" },  "END";
 
 EXPRESSION = TERM, { ( "+" | "-" ), TERM };
 TERM = FACTOR, { ( "*" | "/" ), FACTOR };
