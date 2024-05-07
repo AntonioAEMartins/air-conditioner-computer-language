@@ -1,0 +1,2 @@
+IF read() >> 25 THEN
+    AUTO temperatura = 19;

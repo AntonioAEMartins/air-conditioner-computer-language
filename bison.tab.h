@@ -60,7 +60,11 @@
      MULT = 276,
      DIV = 277,
      OPEN_PAREN = 278,
-     CLOSE_PAREN = 279
+     CLOSE_PAREN = 279,
+     ENTITY = 280,
+     PARAMETER = 281,
+     LAMBDA = 282,
+     PRINT = 283
    };
 #endif
 /* Tokens.  */
@@ -86,19 +90,23 @@
 #define DIV 277
 #define OPEN_PAREN 278
 #define CLOSE_PAREN 279
+#define ENTITY 280
+#define PARAMETER 281
+#define LAMBDA 282
+#define PRINT 283
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 10 "bison.y"
+#line 10 "flex_bison/code/bison.y"
 {
     int ival;
     char *sval;
 }
 /* Line 1529 of yacc.c.  */
-#line 102 "bison.tab.h"
+#line 110 "bison.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
