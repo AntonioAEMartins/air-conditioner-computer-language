@@ -21,7 +21,7 @@ STATEMENT =
     | "show", "(", BOOL_EXP, ")"
     | "check", BOOL_EXP, "if", "\n", { ( STATEMENT ) }, [ "else", "\n", { ( STATEMENT ) } ], "done"
     | "auto", BOOL_EXP, "do", "\n", { ( STATEMENT ) }, "done"
-    | "init", "(", IDENTIFIER, ",", IDENTIFIER, ",", IDENTIFIER, ")"), "\n" ;
+    | "init",IDENTIFIER, "(", IDENTIFIER, ",", IDENTIFIER, ",", IDENTIFIER, ")"), "\n" ;
 
 FACTOR = NUMBER  
     | IDENTIFIER,
