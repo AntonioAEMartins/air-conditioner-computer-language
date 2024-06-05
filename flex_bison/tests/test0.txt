@@ -1,1 +1,5 @@
-SET x 10
+check (a equal b or c below d) and not (e above f) if
+    show (true)
+else
+    show (false)
+done

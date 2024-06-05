@@ -364,7 +364,7 @@ struct yy_trans_info
 static const flex_int16_t yy_accept[21] =
     {   0,
         0,    0,   14,   13,    1,    2,    5,    6,    9,    7,
-        8,   10,    3,   12,   11,    4,    1,    3,    4,    0
+       12,    8,   10,    3,   11,    4,    1,    3,    4,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -373,9 +373,9 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    2,    1,    1,    1,    1,    1,    1,    1,    4,
-        5,    6,    7,    1,    8,    1,    9,   10,   10,   10,
-       10,   10,   10,   10,   10,   10,   10,    1,    1,   11,
-        1,   12,    1,    1,   13,   13,   13,   13,   13,   13,
+        5,    6,    7,    8,    9,    1,   10,   11,   11,   11,
+       11,   11,   11,   11,   11,   11,   11,    1,    1,    1,
+       12,    1,    1,    1,   13,   13,   13,   13,   13,   13,
        13,   13,   13,   13,   13,   13,   13,   13,   13,   13,
        13,   13,   13,   13,   13,   13,   13,   13,   13,   13,
         1,    1,    1,    1,   13,    1,   13,   13,   13,   13,
@@ -401,14 +401,14 @@ static const YY_CHAR yy_ec[256] =
 
 static const YY_CHAR yy_meta[14] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
-        1,    1,    2
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        2,    1,    2
     } ;
 
 static const flex_int16_t yy_base[22] =
     {   0,
         0,    0,   19,   20,   16,   20,   20,   20,   20,   20,
-       20,   20,    7,   20,   20,    0,   14,    5,    0,   20,
+       20,   20,   20,    6,   20,    0,   14,    4,    0,   20,
        12
     } ;
 
@@ -430,7 +430,7 @@ static const flex_int16_t yy_nxt[34] =
 static const flex_int16_t yy_chk[34] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,   21,   18,   17,   13,    5,    3,   20,
+        1,    1,    1,   21,   18,   17,   14,    5,    3,   20,
        20,   20,   20,   20,   20,   20,   20,   20,   20,   20,
        20,   20,   20
     } ;
@@ -452,8 +452,9 @@ char *yytext;
 #line 1 "flex_bison/code/lex.l"
 #line 2 "flex_bison/code/lex.l"
 #include "bison.tab.h"
-#line 455 "lex.yy.c"
+#include <string.h>
 #line 456 "lex.yy.c"
+#line 457 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -670,8 +671,7 @@ YY_DECL
 		}
 
 	{
-#line 5 "flex_bison/code/lex.l"
-
+#line 6 "flex_bison/code/lex.l"
 
 
 #line 677 "lex.yy.c"
@@ -734,20 +734,20 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 8 "flex_bison/code/lex.l"
-;  // Ignora espaços em branco, tabulações e quebras de linha
+;  // Ignora espaços em branco e tabulações
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
 #line 9 "flex_bison/code/lex.l"
-{ printf("Leu N\n");return '\n'; }
+{ printf("Token: NEWLINE\n"); return '\n'; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 11 "flex_bison/code/lex.l"
 {
     yylval.ival = atoi(yytext);   // Converte a string numérica para int e armazena em yylval
-    printf("Leu: %d\n", yylval.ival);
+    printf("Token: NUMBER, Value: %d\n", yylval.ival);
     return NUMBER;
 }
 	YY_BREAK
@@ -756,73 +756,74 @@ YY_RULE_SETUP
 #line 16 "flex_bison/code/lex.l"
 {
     // Verifica palavras-chave e retorna os tokens apropriados
-    printf("Leu: %s\n", yytext);
-    if(strcmp(yytext, "SET") == 0) return SET;
-    if(strcmp(yytext, "CHANGE") == 0) return CHANGE;
-    if(strcmp(yytext, "GET") == 0) return GET;
-    if(strcmp(yytext, "AUTO") == 0) return AUTO;
-    if(strcmp(yytext, "IF") == 0) return IF;
-    if(strcmp(yytext, "THEN") == 0) return THEN;
-    if(strcmp(yytext, "ELSE") == 0) return ELSE;
-    if(strcmp(yytext, "END") == 0) return END;
-    if(strcmp(yytext, "DO") == 0) return DO;
-    if(strcmp(yytext, "OR") == 0) return OR;
-    if(strcmp(yytext, "AND") == 0) return AND;
-    if(strcmp(yytext, "ABOVE") == 0) return ABOVE;
-    if(strcmp(yytext, "BELOW") == 0) return BELOW;
-    if(strcmp(yytext, "EQUAL") == 0) return EQUAL;
-    if(strcmp(yytext, "PRINT" ) == 0) return PRINT;
+    // printf("Token: IDENTIFIER/PALAVRA-CHAVE, Text: %s\n", yytext);
+    if(strcmp(yytext, "set") == 0) { printf("Token: SET\n"); return SET; }
+    if(strcmp(yytext, "show") == 0) { printf("Token: SHOW\n"); return SHOW; }
+    if(strcmp(yytext, "check") == 0) { printf("Token: CHECK\n"); return CHECK; }
+    if(strcmp(yytext, "auto") == 0) { printf("Token: AUTO\n"); return AUTO; }
+    if(strcmp(yytext, "if") == 0) { printf("Token: IF\n"); return IF; }
+    if(strcmp(yytext, "else") == 0) { printf("Token: ELSE\n"); return ELSE; }
+    if(strcmp(yytext, "done") == 0) { printf("Token: DONE\n"); return DONE; }
+    if(strcmp(yytext, "do") == 0) { printf("Token: DO\n"); return DO; }
+    if(strcmp(yytext, "or") == 0) { printf("Token: OR\n"); return OR; }
+    if(strcmp(yytext, "and") == 0) { printf("Token: AND\n"); return AND; }
+    if(strcmp(yytext, "above") == 0) { printf("Token: ABOVE\n"); return ABOVE; }
+    if(strcmp(yytext, "below") == 0) { printf("Token: BELOW\n"); return BELOW; }
+    if(strcmp(yytext, "equal") == 0) { printf("Token: EQUAL\n"); return EQUAL; }
+    if(strcmp(yytext, "not") == 0) { printf("Token: NOT\n"); return NOT; }
+    if(strcmp(yytext, "init") == 0) { printf("Token: INIT\n"); return INIT; }
     // Se não for uma palavra-chave, trata como identificador
     yylval.sval = strdup(yytext); // Aloca memória e copia a string para yylval
+    printf("Token: IDENTIFIER, Value: %s\n", yylval.sval);
     return IDENTIFIER;
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 39 "flex_bison/code/lex.l"
-{ return '('; }
+#line 40 "flex_bison/code/lex.l"
+{ printf("Token: OPEN_PAREN\n"); return OPEN_PAREN; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 40 "flex_bison/code/lex.l"
-{ return ')'; }
+#line 41 "flex_bison/code/lex.l"
+{ printf("Token: CLOSE_PAREN\n"); return CLOSE_PAREN; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 41 "flex_bison/code/lex.l"
-{ return '+'; }
+#line 42 "flex_bison/code/lex.l"
+{ printf("Token: PLUS\n"); return PLUS; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 42 "flex_bison/code/lex.l"
-{ return '-'; }
+#line 43 "flex_bison/code/lex.l"
+{ printf("Token: MINUS\n"); return MINUS; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 43 "flex_bison/code/lex.l"
-{ return '*'; }
+#line 44 "flex_bison/code/lex.l"
+{ printf("Token: MULT\n"); return MULT; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 44 "flex_bison/code/lex.l"
-{ return '/'; }
+#line 45 "flex_bison/code/lex.l"
+{ printf("Token: DIV\n"); return DIV; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 45 "flex_bison/code/lex.l"
-{ return '>'; }
+#line 46 "flex_bison/code/lex.l"
+{ printf("Token: EQUALS\n"); return '='; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 46 "flex_bison/code/lex.l"
-{ return '<'; }
+#line 47 "flex_bison/code/lex.l"
+{ printf("Token: COMMA\n"); return ','; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 49 "flex_bison/code/lex.l"
+#line 50 "flex_bison/code/lex.l"
 ECHO;
 	YY_BREAK
-#line 825 "lex.yy.c"
+#line 826 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1827,5 +1828,10 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 49 "flex_bison/code/lex.l"
+#line 50 "flex_bison/code/lex.l"
+
+
+int yywrap() {
+    return 1;
+}
 

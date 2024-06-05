@@ -42,13 +42,13 @@
      NUMBER = 258,
      IDENTIFIER = 259,
      SET = 260,
-     CHANGE = 261,
-     GET = 262,
+     SHOW = 261,
+     CHECK = 262,
      AUTO = 263,
      IF = 264,
      THEN = 265,
      ELSE = 266,
-     END = 267,
+     DONE = 267,
      DO = 268,
      OR = 269,
      AND = 270,
@@ -61,23 +61,21 @@
      DIV = 277,
      OPEN_PAREN = 278,
      CLOSE_PAREN = 279,
-     ENTITY = 280,
-     PARAMETER = 281,
-     LAMBDA = 282,
-     PRINT = 283
+     INIT = 280,
+     NOT = 281
    };
 #endif
 /* Tokens.  */
 #define NUMBER 258
 #define IDENTIFIER 259
 #define SET 260
-#define CHANGE 261
-#define GET 262
+#define SHOW 261
+#define CHECK 262
 #define AUTO 263
 #define IF 264
 #define THEN 265
 #define ELSE 266
-#define END 267
+#define DONE 267
 #define DO 268
 #define OR 269
 #define AND 270
@@ -90,10 +88,8 @@
 #define DIV 277
 #define OPEN_PAREN 278
 #define CLOSE_PAREN 279
-#define ENTITY 280
-#define PARAMETER 281
-#define LAMBDA 282
-#define PRINT 283
+#define INIT 280
+#define NOT 281
 
 
 
@@ -106,7 +102,7 @@ typedef union YYSTYPE
     char *sval;
 }
 /* Line 1529 of yacc.c.  */
-#line 110 "bison.tab.h"
+#line 106 "bison.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

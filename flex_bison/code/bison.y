@@ -13,100 +13,71 @@ extern int yylex();
 }
 
 %token <ival> NUMBER
-%token <sval> IDENTIFIER SET CHANGE GET AUTO IF THEN ELSE END DO OR AND ABOVE BELOW EQUAL PLUS MINUS MULT DIV OPEN_PAREN CLOSE_PAREN ENTITY PARAMETER LAMBDA PRINT
+%token <sval> IDENTIFIER
+%token SET SHOW CHECK AUTO IF THEN ELSE DONE DO OR AND ABOVE BELOW EQUAL PLUS MINUS MULT DIV OPEN_PAREN CLOSE_PAREN INIT NOT
 
-%type <ival> expression term factor
-%type <sval> block statement assignment_statement change_statement get_statement auto_statement if_statement print_statement
+%type <sval> block statement statement_list
+%type <ival> bool_expression bool_term relation_expression expression term factor
 
 %%
 
-
-block: block statement '\n'
-    | statement '\n'
-    | block statement
-    | statement
+block:
+    statement_list
     ;
 
-lambda_block:
-    statement_list
-|   LAMBDA
-;
-
 statement_list:
-    statement_list statement
-|   statement
-;
+    statement_list statement '\n'
+    | statement '\n'
+    ;
 
 statement: 
-    assignment_statement
-    | change_statement
-    | get_statement
-    | auto_statement
-    | if_statement
-    | print_statement
+    IDENTIFIER '=' bool_expression { printf("Assignment\n"); }
+    | SET IDENTIFIER { printf("Set without assignment\n"); }
+    | SET IDENTIFIER '=' bool_expression { printf("Set with assignment\n"); }
+    | SHOW OPEN_PAREN bool_expression CLOSE_PAREN { printf("Show\n"); }
+    | CHECK bool_expression IF '\n' statement_list DONE { printf("Check If\n"); }
+    | CHECK bool_expression IF '\n' statement_list ELSE '\n' statement_list DONE { printf("Check If Else\n"); }
+    | AUTO bool_expression DO '\n' statement_list DONE { printf("Auto\n"); }
+    | INIT IDENTIFIER OPEN_PAREN IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER CLOSE_PAREN { printf("Init\n"); }
+    ;
+
+bool_expression:
+    bool_term { printf("Bool Expression\n");}
+    | bool_expression OR bool_term { printf("Or\n"); }
+    ;
+
+bool_term:
+    relation_expression { printf("Bool Term\n"); }
+    | bool_term AND relation_expression { printf("And\n"); }
+    ;
+
+relation_expression:
+    expression { printf("Relation Expression\n"); }
+    | expression ABOVE expression { printf("Above\n"); }
+    | expression BELOW expression { printf("Below\n"); }
+    | expression EQUAL expression { printf("Equal\n"); }
     ;
 
 expression:
-    term
+    term { printf("Expression\n"); }
     | expression PLUS term { printf("Add\n"); }
     | expression MINUS term { printf("Subtract\n"); }
     ;
 
 term:
-    factor
+    factor { printf("Term\n"); }
     | term MULT factor { printf("Multiply\n"); }
     | term DIV factor { printf("Divide\n"); }
     ;
 
 factor:
-    NUMBER
-    | IDENTIFIER
-    | OPEN_PAREN expression CLOSE_PAREN { printf("Nested Expression\n"); }
+    NUMBER { printf("Number\n"); }
+    | IDENTIFIER { printf("Identifier\n"); }
+    | PLUS factor { printf("Positive\n"); }
+    | MINUS factor { printf("Negative\n"); }
+    | NOT factor { printf("Not\n"); }
+    | OPEN_PAREN bool_expression CLOSE_PAREN { printf("Nested Expression\n"); }
     ;
-
-assignment_statement: SET IDENTIFIER NUMBER
-    {
-    }
-    ;
-    
-
-change_statement: CHANGE IDENTIFIER NUMBER
-    {
-    }
-    ;
-
-get_statement: GET IDENTIFIER
-    {
-        printf("Get\n");
-    }
-
-auto_statement: AUTO bool_expression DO lambda_block END
-    {
-    }
-    ;
-
-if_statement: IF bool_expression THEN lambda_block END
-    {
-    }
-
-print_statement: PRINT IDENTIFIER
-    {
-        printf("Print\n");
-    }
-
-bool_expression:
-    bool_expression OR bool_term
-    | bool_term;
-
-bool_term:
-    bool_term AND relation_expression
-    | relation_expression;
-
-relation_expression:
-    expression ABOVE expression
-    | expression BELOW expression
-    | expression EQUAL expression;
-
 
 %%
 
