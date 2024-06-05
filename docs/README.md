@@ -3,24 +3,30 @@
 ## EBNF
 
 ```
-BLOCK = { STATEMENT };
+BLOCK = { STATEMENT } ;
 
-STATEMENT = ( "lambda" | ASSIGNMENT | CHANGE | GET | AUTO | IF ), "\n";
+BOOL_EXP = BOOL_TERM, { ("or"), BOOL_TERM } ;
 
-ASSIGNMENT = "SET", IDENTIFIER, NUMBER;
+BOOL_TERM = REL_EXP, { ("and"), REL_EXP } ;
 
-CHANGE = "CHANGE", IDENTIFIER, NUMBER;
-GET = "GET", IDENTIFIER, "\n";
-AUTO = "AUTO", BOOL_EXP, "DO", "lambda", { ( STATEMENT ), "lambda" }, "END";
-IF = "IF", BOOL_EXP, "THEN", "\n", "lambda", { ( STATEMENT ), "lambda" },  "END";
+REL_EXP = EXPRESSION, { ("below" | "above" | "equal" ) , EXPRESSION,  };
 
-EXPRESSION = TERM, { ( "+" | "-" ), TERM };
-TERM = FACTOR, { ( "*" | "/" ), FACTOR };
-FACTOR = ( ( "+" | "-" | "not" ), FACTOR ) | NUMBER | "(", EXPRESSION, ")" | IDENTIFIER;
-BOOL_EXP = BOOL_TERM, { "or", BOOL_TERM };
-BOOL_TERM = REL_EXP, { "and", REL_EXP };
-REL_EXP = EXPRESSION, { ( "==" | ">" | "<" ), EXPRESSION };
+EXPRESSION = TERM, { ("+" | "-" ), TERM } ;
 
+TERM = FACTOR, { ("*" | "/"), FACTOR } ;
+
+STATEMENT = 
+    (IDENTIFIER, "=", BOOL_EXP
+    | "local", IDENTIFIER, "=", BOOL_EXP
+    | "allow", "(", BOOL_EXP, ")"
+    | "check", BOOL_EXP, "if", "\n", { ( STATEMENT ) }, [ "else", "\n", { ( STATEMENT ) } ], "done"
+    | "auto", BOOL_EXP, "do", "\n", { ( STATEMENT ) }, "done"
+    | "init", "(", IDENTIFIER, ",", IDENTIFIER, ",", IDENTIFIER, ")"), "\n" ;
+
+FACTOR = NUMBER  
+    | IDENTIFIER,
+    | ("+" | "-" | "not"), FACTOR 
+    | "(", BOOL_EXP, ")" ;
 IDENTIFIER = LETTER, { LETTER | DIGIT | "_" };
 NUMBER = DIGIT, { DIGIT };
 LETTER = ( "a" | "..." | "z" | "A" | "..." | "Z" );
