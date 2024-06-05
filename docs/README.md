@@ -34,6 +34,8 @@ DIGIT = ( "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "0" );
 
 ```
 
+![Diagrama Sintático](./imgs/diagrama-sintatico.png)
+
 ## Como Executar o Parser
 
 Para compilar e testar o parser gerado com Bison e Flex, você pode usar o script `compile.sh`. Este script automatiza o processo de compilação e execução do parser com um arquivo de entrada especificado.
