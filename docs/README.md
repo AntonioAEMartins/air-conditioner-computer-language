@@ -17,8 +17,8 @@ TERM = FACTOR, { ("*" | "/"), FACTOR } ;
 
 STATEMENT = 
     (IDENTIFIER, "=", BOOL_EXP
-    | "local", IDENTIFIER, "=", BOOL_EXP
-    | "allow", "(", BOOL_EXP, ")"
+    | "set", IDENTIFIER, ( | ("=", BOOL_EXP))
+    | "show", "(", BOOL_EXP, ")"
     | "check", BOOL_EXP, "if", "\n", { ( STATEMENT ) }, [ "else", "\n", { ( STATEMENT ) } ], "done"
     | "auto", BOOL_EXP, "do", "\n", { ( STATEMENT ) }, "done"
     | "init", "(", IDENTIFIER, ",", IDENTIFIER, ",", IDENTIFIER, ")"), "\n" ;
@@ -27,6 +27,7 @@ FACTOR = NUMBER
     | IDENTIFIER,
     | ("+" | "-" | "not"), FACTOR 
     | "(", BOOL_EXP, ")" ;
+
 IDENTIFIER = LETTER, { LETTER | DIGIT | "_" };
 NUMBER = DIGIT, { DIGIT };
 LETTER = ( "a" | "..." | "z" | "A" | "..." | "Z" );
