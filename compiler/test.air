@@ -1,0 +1,9 @@
+set a = 3
+set b = 2
+set c = 3
+set d = 4
+set x
+
+x = not (a below b or c equal d)
+
+show (x)
