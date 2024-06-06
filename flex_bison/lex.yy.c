@@ -449,8 +449,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "flex_bison/code/lex.l"
-#line 2 "flex_bison/code/lex.l"
+#line 1 "code/lex.l"
+#line 2 "code/lex.l"
 #include "bison.tab.h"
 #include <string.h>
 #line 456 "lex.yy.c"
@@ -671,7 +671,7 @@ YY_DECL
 		}
 
 	{
-#line 6 "flex_bison/code/lex.l"
+#line 6 "code/lex.l"
 
 
 #line 677 "lex.yy.c"
@@ -733,18 +733,18 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 8 "flex_bison/code/lex.l"
+#line 8 "code/lex.l"
 ;  // Ignora espaços em branco e tabulações
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 9 "flex_bison/code/lex.l"
+#line 9 "code/lex.l"
 { printf("Token: NEWLINE\n"); return '\n'; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 11 "flex_bison/code/lex.l"
+#line 11 "code/lex.l"
 {
     yylval.ival = atoi(yytext);   // Converte a string numérica para int e armazena em yylval
     printf("Token: NUMBER, Value: %d\n", yylval.ival);
@@ -753,7 +753,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 16 "flex_bison/code/lex.l"
+#line 16 "code/lex.l"
 {
     // Verifica palavras-chave e retorna os tokens apropriados
     // printf("Token: IDENTIFIER/PALAVRA-CHAVE, Text: %s\n", yytext);
@@ -780,47 +780,47 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 40 "flex_bison/code/lex.l"
+#line 40 "code/lex.l"
 { printf("Token: OPEN_PAREN\n"); return OPEN_PAREN; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 41 "flex_bison/code/lex.l"
+#line 41 "code/lex.l"
 { printf("Token: CLOSE_PAREN\n"); return CLOSE_PAREN; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 42 "flex_bison/code/lex.l"
+#line 42 "code/lex.l"
 { printf("Token: PLUS\n"); return PLUS; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 43 "flex_bison/code/lex.l"
+#line 43 "code/lex.l"
 { printf("Token: MINUS\n"); return MINUS; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 44 "flex_bison/code/lex.l"
+#line 44 "code/lex.l"
 { printf("Token: MULT\n"); return MULT; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 45 "flex_bison/code/lex.l"
+#line 45 "code/lex.l"
 { printf("Token: DIV\n"); return DIV; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 46 "flex_bison/code/lex.l"
+#line 46 "code/lex.l"
 { printf("Token: EQUALS\n"); return '='; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 47 "flex_bison/code/lex.l"
+#line 47 "code/lex.l"
 { printf("Token: COMMA\n"); return ','; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 50 "flex_bison/code/lex.l"
+#line 50 "code/lex.l"
 ECHO;
 	YY_BREAK
 #line 826 "lex.yy.c"
@@ -1828,7 +1828,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 50 "flex_bison/code/lex.l"
+#line 50 "code/lex.l"
 
 
 int yywrap() {

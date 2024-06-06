@@ -96,7 +96,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 10 "flex_bison/code/bison.y"
+#line 10 "code/bison.y"
 {
     int ival;
     char *sval;

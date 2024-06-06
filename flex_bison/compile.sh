@@ -10,8 +10,8 @@ fi
 inputFile=$1
 
 # Comandos para processar os arquivos Bison e Flex
-bison -d flex_bison/code/bison.y
-flex flex_bison/code/lex.l
+bison -d code/bison.y
+flex code/lex.l
 clang -o parser bison.tab.c lex.yy.c -ll
 
 # Executa o parser com o arquivo de entrada fornecido

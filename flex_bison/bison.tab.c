@@ -122,7 +122,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "flex_bison/code/bison.y"
+#line 1 "code/bison.y"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -152,7 +152,7 @@ extern int yylex();
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 10 "flex_bison/code/bison.y"
+#line 10 "code/bison.y"
 {
     int ival;
     char *sval;
@@ -1423,142 +1423,142 @@ yyreduce:
   switch (yyn)
     {
         case 5:
-#line 34 "flex_bison/code/bison.y"
+#line 34 "code/bison.y"
     { printf("Assignment\n"); ;}
     break;
 
   case 6:
-#line 35 "flex_bison/code/bison.y"
+#line 35 "code/bison.y"
     { printf("Set without assignment\n"); ;}
     break;
 
   case 7:
-#line 36 "flex_bison/code/bison.y"
+#line 36 "code/bison.y"
     { printf("Set with assignment\n"); ;}
     break;
 
   case 8:
-#line 37 "flex_bison/code/bison.y"
+#line 37 "code/bison.y"
     { printf("Show\n"); ;}
     break;
 
   case 9:
-#line 38 "flex_bison/code/bison.y"
+#line 38 "code/bison.y"
     { printf("Check If\n"); ;}
     break;
 
   case 10:
-#line 39 "flex_bison/code/bison.y"
+#line 39 "code/bison.y"
     { printf("Check If Else\n"); ;}
     break;
 
   case 11:
-#line 40 "flex_bison/code/bison.y"
+#line 40 "code/bison.y"
     { printf("Auto\n"); ;}
     break;
 
   case 12:
-#line 41 "flex_bison/code/bison.y"
+#line 41 "code/bison.y"
     { printf("Init\n"); ;}
     break;
 
   case 13:
-#line 45 "flex_bison/code/bison.y"
+#line 45 "code/bison.y"
     { printf("Bool Expression\n");;}
     break;
 
   case 14:
-#line 46 "flex_bison/code/bison.y"
+#line 46 "code/bison.y"
     { printf("Or\n"); ;}
     break;
 
   case 15:
-#line 50 "flex_bison/code/bison.y"
+#line 50 "code/bison.y"
     { printf("Bool Term\n"); ;}
     break;
 
   case 16:
-#line 51 "flex_bison/code/bison.y"
+#line 51 "code/bison.y"
     { printf("And\n"); ;}
     break;
 
   case 17:
-#line 55 "flex_bison/code/bison.y"
+#line 55 "code/bison.y"
     { printf("Relation Expression\n"); ;}
     break;
 
   case 18:
-#line 56 "flex_bison/code/bison.y"
+#line 56 "code/bison.y"
     { printf("Above\n"); ;}
     break;
 
   case 19:
-#line 57 "flex_bison/code/bison.y"
+#line 57 "code/bison.y"
     { printf("Below\n"); ;}
     break;
 
   case 20:
-#line 58 "flex_bison/code/bison.y"
+#line 58 "code/bison.y"
     { printf("Equal\n"); ;}
     break;
 
   case 21:
-#line 62 "flex_bison/code/bison.y"
+#line 62 "code/bison.y"
     { printf("Expression\n"); ;}
     break;
 
   case 22:
-#line 63 "flex_bison/code/bison.y"
+#line 63 "code/bison.y"
     { printf("Add\n"); ;}
     break;
 
   case 23:
-#line 64 "flex_bison/code/bison.y"
+#line 64 "code/bison.y"
     { printf("Subtract\n"); ;}
     break;
 
   case 24:
-#line 68 "flex_bison/code/bison.y"
+#line 68 "code/bison.y"
     { printf("Term\n"); ;}
     break;
 
   case 25:
-#line 69 "flex_bison/code/bison.y"
+#line 69 "code/bison.y"
     { printf("Multiply\n"); ;}
     break;
 
   case 26:
-#line 70 "flex_bison/code/bison.y"
+#line 70 "code/bison.y"
     { printf("Divide\n"); ;}
     break;
 
   case 27:
-#line 74 "flex_bison/code/bison.y"
+#line 74 "code/bison.y"
     { printf("Number\n"); ;}
     break;
 
   case 28:
-#line 75 "flex_bison/code/bison.y"
+#line 75 "code/bison.y"
     { printf("Identifier\n"); ;}
     break;
 
   case 29:
-#line 76 "flex_bison/code/bison.y"
+#line 76 "code/bison.y"
     { printf("Positive\n"); ;}
     break;
 
   case 30:
-#line 77 "flex_bison/code/bison.y"
+#line 77 "code/bison.y"
     { printf("Negative\n"); ;}
     break;
 
   case 31:
-#line 78 "flex_bison/code/bison.y"
+#line 78 "code/bison.y"
     { printf("Not\n"); ;}
     break;
 
   case 32:
-#line 79 "flex_bison/code/bison.y"
+#line 79 "code/bison.y"
     { printf("Nested Expression\n"); ;}
     break;
 
@@ -1778,7 +1778,7 @@ yyreturn:
 }
 
 
-#line 82 "flex_bison/code/bison.y"
+#line 82 "code/bison.y"
 
 
 void yyerror(const char *s) {
