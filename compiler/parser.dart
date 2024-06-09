@@ -22,9 +22,27 @@ class Parser {
 
   Node statement() {
     if (tokenizer.next.type == TokenType.identifier) {
-      final Token identifier = tokenizer.next; 
+      final Token identifier = tokenizer.next;
       tokenizer.selectNext(); // Consume identifier
-      if (tokenizer.next.type == TokenType.equal) {
+
+      if (tokenizer.next.type == TokenType.dot) {
+        // Handle class attribute assignment
+        tokenizer.selectNext(); // Consume '.'
+        if (tokenizer.next.type != TokenType.identifier) {
+          throw FormatException(
+              "Expected identifier but found ${tokenizer.next.type}");
+        }
+        final Token attribute = tokenizer.next;
+        tokenizer.selectNext(); // Consume attribute identifier
+        if (tokenizer.next.type != TokenType.equal) {
+          throw FormatException(
+              "Expected '=' but found ${tokenizer.next.type}");
+        }
+        tokenizer.selectNext(); // Consume '='
+        final Node expression = boolExpression();
+        return ClassAttributeAssignOp(Identifier(identifier.value),
+            Identifier(attribute.value), expression);
+      } else if (tokenizer.next.type == TokenType.equal) {
         tokenizer.selectNext(); // Consume '='
         final Node expression = boolExpression();
         final Identifier id = Identifier(identifier.value);
@@ -44,7 +62,24 @@ class Parser {
       final Token identifier = tokenizer.next;
       final Identifier id = Identifier(identifier.value);
       tokenizer.selectNext(); // Consume identifier
-      if (tokenizer.next.type == TokenType.lineBreak) {
+      if (tokenizer.next.type == TokenType.dot) {
+        // Handle class attribute declaration
+        tokenizer.selectNext(); // Consume '.'
+        if (tokenizer.next.type != TokenType.identifier) {
+          throw FormatException(
+              "Expected identifier but found ${tokenizer.next.type}");
+        }
+        final Token attribute = tokenizer.next;
+        final Identifier attrId = Identifier(attribute.value);
+        tokenizer.selectNext(); // Consume attribute identifier
+        if (tokenizer.next.type != TokenType.equal) {
+          throw FormatException(
+              "Expected '=' but found ${tokenizer.next.type}");
+        }
+        tokenizer.selectNext(); // Consume '='
+        final Node expression = boolExpression();
+        return ClassAttributeAssignOp(id, attrId, expression);
+      } else if (tokenizer.next.type == TokenType.lineBreak) {
         return VarDecOp(id, NullOp());
       }
       if (tokenizer.next.type != TokenType.equal) {
@@ -52,10 +87,6 @@ class Parser {
       }
       tokenizer.selectNext(); // Consume '='
       final Node expression = boolExpression();
-
-      if (tokenizer.next.type == TokenType.equal) {
-        throw FormatException("Token not expected ${tokenizer.next.type}");
-      }
       return VarDecOp(id, expression);
     } else if (tokenizer.next.type == TokenType.show) {
       tokenizer.selectNext(); // Consume 'show'
@@ -84,7 +115,7 @@ class Parser {
       final Node block = this.endBlock();
       if (tokenizer.next.type != TokenType.doneToken) {
         throw FormatException(
-            "Expected 'end' but found ${tokenizer.next.type}");
+            "Expected 'done' but found ${tokenizer.next.type}");
       }
       tokenizer.selectNext(); // Consume 'done'
       return WhileOp(condition, block);
@@ -92,8 +123,7 @@ class Parser {
       tokenizer.selectNext(); // Consume 'check'
       final Node condition = boolExpression();
       if (tokenizer.next.type != TokenType.ifToken) {
-        throw FormatException(
-            "Expected 'then' but found ${tokenizer.next.type}");
+        throw FormatException("Expected 'if' but found ${tokenizer.next.type}");
       }
       tokenizer.selectNext(); // Consume 'if'
       if (tokenizer.next.type != TokenType.lineBreak) {
@@ -107,23 +137,44 @@ class Parser {
         final Node elseBlock = this.endBlock();
         if (tokenizer.next.type != TokenType.doneToken) {
           throw FormatException(
-              "Expected 'end' but found ${tokenizer.next.type}");
+              "Expected 'done' but found ${tokenizer.next.type}");
         }
         tokenizer.selectNext(); // Consume 'done'
-
         return IfOp(condition, block, elseBlock);
       }
       if (tokenizer.next.type != TokenType.doneToken) {
         throw FormatException(
-            "Expected 'end' but found ${tokenizer.next.type}");
+            "Expected 'done' but found ${tokenizer.next.type}");
       }
-      tokenizer.selectNext(); // Consume 'end'
-      if (tokenizer.next.type != TokenType.lineBreak) {
-        throw FormatException(
-            "Expected line break but found ${tokenizer.next.type}");
-      }
-      tokenizer.selectNext();
+      tokenizer.selectNext(); // Consume 'done'
       return IfOp(condition, block, null);
+    } else if (tokenizer.next.type == TokenType.initToken) {
+      tokenizer.selectNext(); // Consume 'init'
+      if (tokenizer.next.type != TokenType.identifier) {
+        throw FormatException(
+            "Expected identifier but found ${tokenizer.next.type}");
+      }
+      final Identifier className = Identifier(tokenizer.next.value);
+      tokenizer.selectNext(); // Consume class name
+      if (tokenizer.next.type != TokenType.openParen) {
+        throw FormatException("Expected '(' but found ${tokenizer.next.type}");
+      }
+      tokenizer.selectNext(); // Consume '('
+      final List<Identifier> attributes = [];
+      if (tokenizer.next.type != TokenType.closeParen) {
+        attributes.add(Identifier(tokenizer.next.value));
+        tokenizer.selectNext(); // Consume identifier
+        while (tokenizer.next.type == TokenType.comma) {
+          tokenizer.selectNext(); // Consume ','
+          attributes.add(Identifier(tokenizer.next.value));
+          tokenizer.selectNext(); // Consume identifier
+        }
+      }
+      if (tokenizer.next.type != TokenType.closeParen) {
+        throw FormatException("Expected ')' but found ${tokenizer.next.type}");
+      }
+      tokenizer.selectNext(); // Consume ')'
+      return ClassInitOp(className, attributes);
     }
     if (tokenizer.next.type != TokenType.lineBreak) {
       throw FormatException(
@@ -135,16 +186,13 @@ class Parser {
 
   Node block() {
     Node result = Block();
-
     while (tokenizer.next.type != TokenType.eof &&
         tokenizer.next.type != TokenType.doneToken) {
       result.children.add(statement());
     }
-
     if (tokenizer.next.type == TokenType.doneToken) {
       throw FormatException("The block is not closed");
     }
-
     return result;
   }
 
@@ -181,7 +229,17 @@ class Parser {
     } else if (tokenizer.next.type == TokenType.identifier) {
       final Token identifier = tokenizer.next;
       tokenizer.selectNext();
-
+      if (tokenizer.next.type == TokenType.dot) {
+        tokenizer.selectNext(); // Consume '.'
+        if (tokenizer.next.type != TokenType.identifier) {
+          throw FormatException(
+              "Expected identifier but found ${tokenizer.next.type}");
+        }
+        final Token attribute = tokenizer.next;
+        tokenizer.selectNext(); // Consume attribute identifier
+        return AttributeAccessOp(
+            Identifier(identifier.value), Identifier(attribute.value));
+      }
       if (tokenizer.next.type == TokenType.openParen) {
         tokenizer.selectNext(); // Consume '('
         List<Node> parameters = [];
@@ -192,7 +250,6 @@ class Parser {
             parameters.add(boolExpression());
           }
         }
-
         if (tokenizer.next.type != TokenType.closeParen) {
           throw FormatException(
               "Expected ')' but found ${tokenizer.next.type}");

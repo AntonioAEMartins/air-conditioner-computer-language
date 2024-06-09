@@ -3,7 +3,6 @@ import 'parser.dart';
 import 'pre_pro.dart';
 import 'tables.dart';
 
-
 void main(List<String> args) {
   if (args.isEmpty) {
     throw ArgumentError('Please provide an expression to parse');
@@ -25,8 +24,8 @@ void main(List<String> args) {
       stdout.writeln(result);
     }
   } catch (e, s) {
-    // print('Error: ${e.toString()}');
-    // print('Stack Trace:\n$s');
-    throw e;
+    print('Error: ${e.toString()}');
+    print('Stack Trace:\n$s');
+    // throw e;
   }
 }

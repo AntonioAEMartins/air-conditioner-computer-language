@@ -39,23 +39,36 @@ class SymbolTable {
   }
 
   final Map<String, Map<String, dynamic>> _table = {};
+  final Map<String, Map<String, dynamic>> _classes = {};
 
-  void set(
-      {required String key,
-      required dynamic value,
-      required dynamic type,
-      required bool isLocal}) {
+  void set({
+    required String key,
+    required dynamic value,
+    required dynamic type,
+    required bool isLocal
+  }) {
     if (!isLocal) {
-      if (_table[key] != null) {
-        _table[key] = {'value': value, 'type': type};
-      } else {
-        throw Exception('Variable already defined: $key');
-      }
-    } else if (_table[key] == null) {
+      // Permitir redefinição de variáveis
       _table[key] = {'value': value, 'type': type};
     } else {
-      throw Exception('Variable already defined: $key (local)');
+      if (_table[key] == null) {
+        _table[key] = {'value': value, 'type': type};
+      } else {
+        throw Exception('Variable already defined: $key (local)');
+      }
     }
+  }
+
+  void setClass(String className, Map<String, dynamic> attributes) {
+    if (_classes[className] == null) {
+      _classes[className] = attributes;
+    } else {
+      throw Exception('Class already defined: $className');
+    }
+  }
+
+  Map<String, dynamic>? getClass(String className) {
+    return _classes[className];
   }
 
   ({dynamic value, String type}) get(String key) {

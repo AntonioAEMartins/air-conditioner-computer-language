@@ -19,7 +19,7 @@ class BinOp extends Node {
   dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
     var leftResult = left.Evaluate(_table, _funcTable);
     var rightResult = right.Evaluate(_table, _funcTable);
-    
+
     if (rightResult == null) {
       rightResult = {'value': 0, 'type': 'integer'};
     }
@@ -268,10 +268,6 @@ class Block extends Node {
   @override
   dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
     for (var child in children) {
-      if (child.runtimeType == ReturnOp || child.runtimeType == IfOp) {
-        final aux = child.Evaluate(_table, _funcTable);
-        return aux;
-      }
       child.Evaluate(_table, _funcTable);
     }
   }
@@ -300,10 +296,7 @@ class WhileOp extends Node {
   @override
   dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
     while (condition.Evaluate(_table, _funcTable)['value']) {
-      final aux = block.Evaluate(_table, _funcTable);
-      if (aux != null) {
-        return aux;
-      }
+      block.Evaluate(_table, _funcTable);
     }
   }
 }
@@ -318,15 +311,9 @@ class IfOp extends Node {
   @override
   dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
     if (condition.Evaluate(_table, _funcTable)['value']) {
-      final ifResult = ifOp.Evaluate(_table, _funcTable);
-      if (ifResult != null) {
-        return ifResult;
-      }
+      ifOp.Evaluate(_table, _funcTable);
     } else {
-      final elseResult = elseOp?.Evaluate(_table, _funcTable);
-      if (elseResult != null) {
-        return elseResult;
-      }
+      elseOp?.Evaluate(_table, _funcTable);
     }
   }
 }
@@ -400,5 +387,64 @@ class ReturnOp extends Node {
   @override
   dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
     return expr.Evaluate(_table, _funcTable);
+  }
+}
+
+class ClassInitOp extends Node {
+  final Identifier className;
+  final List<Identifier> attributes;
+  ClassInitOp(this.className, this.attributes) : super(null);
+
+  @override
+  dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
+    final Map<String, dynamic> classAttributes = {};
+    for (final attribute in attributes) {
+      classAttributes[attribute.name] = null;
+    }
+    _table.set(
+      key: className.name,
+      value: classAttributes,
+      type: 'class',
+      isLocal: false,
+    );
+  }
+}
+
+class AttributeAccessOp extends Node {
+  final Identifier className;
+  final Identifier attribute;
+  AttributeAccessOp(this.className, this.attribute) : super(null);
+
+  @override
+  dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
+    var classInstance = _table.get(className.name).value;
+    if (classInstance is Map<String, dynamic>) {
+      if (classInstance.containsKey(attribute.name)) {
+        return {'value': classInstance[attribute.name], 'type': 'integer'};
+      } else {
+        throw Exception('Undefined attribute: ${attribute.name}');
+      }
+    } else {
+      throw Exception('Undefined class: ${className.name}');
+    }
+  }
+}
+
+class ClassAttributeAssignOp extends Node {
+  final Identifier className;
+  final Identifier attribute;
+  final Node expr;
+  ClassAttributeAssignOp(this.className, this.attribute, this.expr)
+      : super(null);
+
+  @override
+  dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
+    var classInstance = _table.get(className.name).value;
+    if (classInstance is Map<String, dynamic>) {
+      var exprResult = expr.Evaluate(_table, _funcTable);
+      classInstance[attribute.name] = exprResult['value'];
+    } else {
+      throw Exception('Undefined class: ${className.name}');
+    }
   }
 }

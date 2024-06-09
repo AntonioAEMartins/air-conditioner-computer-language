@@ -25,6 +25,8 @@ enum TokenType {
   set,
   lineBreak,
   comma,
+  initToken,
+  dot,
 }
 
 final Map<String, TokenType> keywordTokens = {
@@ -42,6 +44,7 @@ final Map<String, TokenType> keywordTokens = {
   'below': TokenType.less,
   'above': TokenType.greater,
   'equal': TokenType.equalEqual,
+  'init': TokenType.initToken,
 };
 
 class Token {
@@ -108,6 +111,9 @@ class Tokenizer {
         next = Token(TokenType.comma, 0);
         position++;
         break;
+      case '.':
+        next = Token(TokenType.dot, 0);
+        position++;
       default:
         if (char.startsWith(RegExp(r'[a-zA-Z_]'))) {
           final start = position;
