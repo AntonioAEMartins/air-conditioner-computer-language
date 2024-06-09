@@ -25,7 +25,6 @@ set energy_consumption = 0
 
 show(energy_consumption)
 
-set y = 0
 check room_temperature.external equal room_temperature.ambient if
   air_conditioner.status = 1
 else 
