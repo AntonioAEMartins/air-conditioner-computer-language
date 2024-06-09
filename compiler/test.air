@@ -1,9 +1,61 @@
-set a = 3
-set b = 2
-set c = 3
-set d = 4
-set x
+-- This code will simulate a simple air conditioner system
+-- Using a room temperature class, that will simulate the room temperature
+-- And an air conditioner class, that will simulate the air conditioner
 
-x = not (a below b or c equal d)
+init room_temperature(external, ambient)
+init air_conditioner(power, status, target_temperature)
 
-show (x)
+show(room_temperature)
+show(air_conditioner)
+
+-- Both classes will be initialized with all of the parameters equal to null
+
+room_temperature.external = 30
+room_temperature.ambient = 30
+
+show (room_temperature)
+
+air_conditioner.power = 1
+air_conditioner.status = 0 -- 1 = on, 0 = off
+air_conditioner.target_temperature = 10
+
+show(air_conditioner)
+
+set energy_consumption = 0
+
+show(energy_consumption)
+
+set y = 0
+check room_temperature.external equal room_temperature.ambient if
+  air_conditioner.status = 1
+else 
+  check room_temperature.external above room_temperature.ambient if
+    air_conditioner.status = 1
+  else
+    air_conditioner.status = 0
+  done
+done
+
+show(air_conditioner.status)
+
+-- All the variables, classes and boolean expressions are working as expected
+
+air_conditioner.status = 0
+auto ((room_temperature.external above room_temperature.ambient) or (room_temperature.external equal room_temperature.ambient)) and not(air_conditioner.target_temperature equal room_temperature.ambient) do
+  air_conditioner.status = 1
+  energy_consumption = 1
+  room_temperature.ambient = room_temperature.ambient - (1 * air_conditioner.power)
+  show(room_temperature.ambient)
+done
+
+show(air_conditioner.status)
+
+-- The auto function is working as expected, now, to finalize the simulation there will be a combination of boolean and arithmetic expressions
+
+set and_operation = ((room_temperature.external above room_temperature.ambient) or (room_temperature.external equal room_temperature.ambient)) and not(air_conditioner.target_temperature equal room_temperature.ambient)
+set or_operation = ((room_temperature.external above room_temperature.ambient) or (room_temperature.external equal room_temperature.ambient))
+set not_operation = not(air_conditioner.target_temperature equal room_temperature.ambient)
+set subtraction = room_temperature.ambient - (1 * air_conditioner.power)
+set addition = room_temperature.ambient + (1 * air_conditioner.power)
+set multiplication = 1 * air_conditioner.power
+set division = room_temperature.ambient / (1 * air_conditioner.power)
