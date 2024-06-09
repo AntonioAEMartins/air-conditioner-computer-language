@@ -184,15 +184,6 @@ class IntVal extends Node {
   }
 }
 
-class StringVal extends Node {
-  StringVal(String value) : super({'value': value, 'type': 'string'});
-
-  @override
-  dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
-    return value;
-  }
-}
-
 class NoOp extends Node {
   NoOp() : super(null);
 
@@ -202,9 +193,9 @@ class NoOp extends Node {
   }
 }
 
-class PrintOp extends Node {
+class ShowOp extends Node {
   final Node expr;
-  PrintOp(this.expr) : super(null);
+  ShowOp(this.expr) : super(null);
 
   @override
   dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
@@ -273,25 +264,10 @@ class Block extends Node {
   }
 }
 
-class ReadOp extends Node {
-  ReadOp() : super(null);
-
-  @override
-  dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
-    var input = stdin.readLineSync() ?? '';
-    try {
-      int number = int.parse(input);
-      return {'value': number, 'type': 'integer'};
-    } catch (e) {
-      return {'value': input, 'type': 'string'};
-    }
-  }
-}
-
-class WhileOp extends Node {
+class AutoOp extends Node {
   final Node condition;
   final Node block;
-  WhileOp(this.condition, this.block) : super(null);
+  AutoOp(this.condition, this.block) : super(null);
 
   @override
   dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
@@ -301,12 +277,12 @@ class WhileOp extends Node {
   }
 }
 
-class IfOp extends Node {
+class CheckOp extends Node {
   final Node condition;
   final Node ifOp;
   final Node? elseOp;
 
-  IfOp(this.condition, this.ifOp, this.elseOp) : super(null);
+  CheckOp(this.condition, this.ifOp, this.elseOp) : super(null);
 
   @override
   dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
@@ -324,69 +300,6 @@ class NullOp extends Node {
   @override
   dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
     return {"value": null, "type": null};
-  }
-}
-
-class FuncDecOp extends Node {
-  final Identifier identifier;
-  final List<Identifier> parameters;
-  final Node block;
-  FuncDecOp(this.identifier, this.parameters, this.block) : super(null);
-
-  @override
-  dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
-    _funcTable.set(
-      key: identifier.name,
-      node: this,
-    );
-  }
-}
-
-class FuncCallOp extends Node {
-  final Identifier identifier;
-  final List<Node> arguments;
-  FuncCallOp(this.identifier, this.arguments) : super(null);
-
-  @override
-  dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
-    final func = _funcTable.get(identifier.name);
-
-    if (func == null) {
-      throw Exception('Function ${identifier.name} not found');
-    }
-
-    if (func.parameters.length != arguments.length) {
-      throw Exception(
-          'Function ${identifier.name} expects ${func.parameters.length} arguments');
-    }
-
-    final localTable = SymbolTable.getNewInstance();
-
-    for (var i = 0; i < func.parameters.length; i++) {
-      var arg = arguments[i].Evaluate(_table, _funcTable);
-      localTable.set(
-        key: func.parameters[i].name,
-        value: arg['value'],
-        type: arg['type'],
-        isLocal: true,
-      );
-    }
-
-    final functionReturn = func.block.Evaluate(localTable, _funcTable);
-
-    if (functionReturn != null) {
-      return functionReturn;
-    }
-  }
-}
-
-class ReturnOp extends Node {
-  final Node expr;
-  ReturnOp(this.expr) : super(null);
-
-  @override
-  dynamic Evaluate(SymbolTable _table, FuncTable _funcTable) {
-    return expr.Evaluate(_table, _funcTable);
   }
 }
 

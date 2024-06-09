@@ -99,7 +99,7 @@ class Parser {
         throw FormatException("Expected ')' but found ${tokenizer.next.type}");
       }
       tokenizer.selectNext(); // Consume ')'
-      return PrintOp(expression);
+      return ShowOp(expression);
     } else if (tokenizer.next.type == TokenType.autoToken) {
       tokenizer.selectNext(); // Consume 'auto'
       final Node condition = boolExpression();
@@ -118,7 +118,7 @@ class Parser {
             "Expected 'done' but found ${tokenizer.next.type}");
       }
       tokenizer.selectNext(); // Consume 'done'
-      return WhileOp(condition, block);
+      return AutoOp(condition, block);
     } else if (tokenizer.next.type == TokenType.checkToken) {
       tokenizer.selectNext(); // Consume 'check'
       final Node condition = boolExpression();
@@ -140,14 +140,14 @@ class Parser {
               "Expected 'done' but found ${tokenizer.next.type}");
         }
         tokenizer.selectNext(); // Consume 'done'
-        return IfOp(condition, block, elseBlock);
+        return CheckOp(condition, block, elseBlock);
       }
       if (tokenizer.next.type != TokenType.doneToken) {
         throw FormatException(
             "Expected 'done' but found ${tokenizer.next.type}");
       }
       tokenizer.selectNext(); // Consume 'done'
-      return IfOp(condition, block, null);
+      return CheckOp(condition, block, null);
     } else if (tokenizer.next.type == TokenType.initToken) {
       tokenizer.selectNext(); // Consume 'init'
       if (tokenizer.next.type != TokenType.identifier) {
@@ -240,23 +240,7 @@ class Parser {
         return AttributeAccessOp(
             Identifier(identifier.value), Identifier(attribute.value));
       }
-      if (tokenizer.next.type == TokenType.openParen) {
-        tokenizer.selectNext(); // Consume '('
-        List<Node> parameters = [];
-        if (tokenizer.next.type != TokenType.closeParen) {
-          parameters.add(boolExpression());
-          while (tokenizer.next.type == TokenType.comma) {
-            tokenizer.selectNext(); // Consume ','
-            parameters.add(boolExpression());
-          }
-        }
-        if (tokenizer.next.type != TokenType.closeParen) {
-          throw FormatException(
-              "Expected ')' but found ${tokenizer.next.type}");
-        }
-        tokenizer.selectNext(); // Consume ')'
-        return FuncCallOp(Identifier(identifier.value), parameters);
-      }
+
       return Identifier(identifier.value);
     } else if (tokenizer.next.type == TokenType.plus) {
       tokenizer.selectNext(); // Consume operator
